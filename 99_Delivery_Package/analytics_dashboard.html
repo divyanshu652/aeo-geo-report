@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEO + GEO Analytics Dashboard — Raleigh Comprehensive & Cosmetic Dentistry</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; }
+        .header p { font-size: 14px; opacity: 0.8; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 30px; }
+        .date-badge {
+            display: inline-block;
+            background: #3182ce;
+            color: white;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .section h2 {
+            font-size: 20px;
+            color: #1a202c;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .kpi-card {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        .kpi-card .value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        .kpi-card .label {
+            font-size: 13px;
+            color: #718096;
+            margin-top: 4px;
+        }
+        .kpi-card .status {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+        .status-excellent { background: #c6f6d5; color: #22543d; }
+        .status-good { background: #bee3f8; color: #2a4365; }
+        .status-warning { background: #feebc8; color: #744210; }
+        .status-poor { background: #fed7d7; color: #742a2a; }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+        th {
+            background: #edf2f7;
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: #4a5568;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
+        }
+        tr:hover { background: #f7fafc; }
+        .highlight-green { color: #22543d; font-weight: 600; }
+        .highlight-red { color: #742a2a; font-weight: 600; }
+        .highlight-yellow { color: #744210; font-weight: 600; }
+        .highlight-blue { color: #2a4365; font-weight: 600; }
+
+        /* Progress bars */
+        .progress-bar {
+            width: 100%;
+            height: 24px;
+            background: #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            font-size: 11px;
+            font-weight: bold;
+            color: white;
+            transition: width 0.5s ease;
+        }
+        .fill-green { background: linear-gradient(90deg, #48bb78, #38a169); }
+        .fill-blue { background: linear-gradient(90deg, #4299e1, #3182ce); }
+        .fill-yellow { background: linear-gradient(90deg, #ed8936, #dd6b20); }
+        .fill-red { background: linear-gradient(90deg, #fc8181, #f56565); }
+
+        /* Insight boxes */
+        .insight {
+            background: #ebf8ff;
+            border-left: 4px solid #3182ce;
+            padding: 16px 20px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 16px;
+        }
+        .insight strong { color: #2a4365; }
+        .insight.warning {
+            background: #fffaf0;
+            border-left-color: #dd6b20;
+        }
+        .insight.warning strong { color: #744210; }
+        .insight.danger {
+            background: #fff5f5;
+            border-left-color: #fc8181;
+        }
+        .insight.danger strong { color: #742a2a; }
+
+        /* Opportunity cards */
+        .opp-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .opp-card {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+        }
+        .opp-card h4 {
+            font-size: 14px;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+        .opp-card .meta {
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            color: #718096;
+        }
+        .tag {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .tag-high { background: #fed7d7; color: #742a2a; }
+        .tag-med { background: #feebc8; color: #744210; }
+        .tag-low { background: #e2e8f0; color: #4a5568; }
+
+        /* Status timeline */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            background: #f7fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .timeline-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .icon-done { background: #c6f6d5; }
+        .icon-progress { background: #bee3f8; }
+        .icon-pending { background: #edf2f7; }
+        .timeline-text { font-size: 14px; }
+        .timeline-text small { color: #718096; font-size: 12px; }
+
+        /* ASCII visualization */
+        .ascii-chart {
+            background: #1a202c;
+            color: #48bb78;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.4;
+            overflow-x: auto;
+            white-space: pre;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>AEO + GEO Analytics Dashboard</h1>
+    <p>Raleigh Comprehensive & Cosmetic Dentistry — Visibility Baseline Report</p>
+    <div class="date-badge">October 2, 2026</div>
+</div>
+
+<div class="container">
+
+    <!-- KPI OVERVIEW -->
+    <div class="section">
+        <h2>Key Performance Indicators</h2>
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="value">1,000</div>
+                <div class="label">Search Queries</div>
+                <span class="status status-good">Baseline</span>
+            </div>
+            <div class="kpi-card">
+                <div class="value">259</div>
+                <div class="label">Total Clicks</div>
+                <span class="status status-good">6 months</span>
+            </div>
+            <div class="kpi-card">
+                <div class="value">85,713</div>
+                <div class="label">Total Impressions</div>
+                <span class="status status-good">6 months</span>
+            </div>
+            <div class="kpi-card">
+                <div class="value">0.30%</div>
+                <div class="label">Overall CTR</div>
+                <span class="status status-warning">Needs improvement</span>
+            </div>
+            <div class="kpi-card">
+                <div class="value">16.4</div>
+                <div class="label">Avg Position</div>
+                <span class="status status-warning">Page 2</span>
+            </div>
+            <div class="kpi-card">
+                <div class="value">17.9%</div>
+                <div class="label">AI Mention Rate</div>
+                <span class="status status-poor">Low visibility</span>
+            </div>
+            <div class="kpi-card">
+                <div class="value">4.7<span style="font-size:18px">/5</span></div>
+                <div class="label">GBP Rating</div>
+                <span class="status status-excellent">Excellent</span>
+            </div>
+            <div class="kpi-card">
+                <div class="value">91</div>
+                <div class="label">GBP Reviews</div>
+                <span class="status status-good">Growing</span>
+            </div>
+            <div class="kpi-card">
+                <div class="value">26,918</div>
+                <div class="label">GBP Views (6mo)</div>
+                <span class="status status-excellent">Strong</span>
+            </div>
+            <div class="kpi-card">
+                <div class="value">216</div>
+                <div class="label">GBP Calls (6mo)</div>
+                <span class="status status-good">Average</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEARCH PERFORMANCE -->
+    <div class="section">
+        <h2>Search Performance</h2>
+
+        <h3 style="font-size:16px; margin:20px 0 12px; color:#4a5568;">Branded vs Non-Branded</h3>
+        <table>
+            <tr>
+                <th>Type</th>
+                <th>Queries</th>
+                <th>Impressions</th>
+                <th>Clicks</th>
+                <th>CTR</th>
+                <th>Avg Position</th>
+                <th>Share of Clicks</th>
+            </tr>
+            <tr>
+                <td><strong>Branded</strong></td>
+                <td>27</td>
+                <td>2,663</td>
+                <td class="highlight-green">207</td>
+                <td class="highlight-green">7.77%</td>
+                <td class="highlight-green">4.8</td>
+                <td class="highlight-green">80%</td>
+            </tr>
+            <tr>
+                <td><strong>Non-Branded</strong></td>
+                <td>973</td>
+                <td>83,050</td>
+                <td class="highlight-red">52</td>
+                <td class="highlight-red">0.06%</td>
+                <td class="highlight-yellow">16.8</td>
+                <td class="highlight-red">20%</td>
+            </tr>
+            <tr style="background:#edf2f7; font-weight:bold;">
+                <td>Total</td>
+                <td>1,000</td>
+                <td>85,713</td>
+                <td>259</td>
+                <td>0.30%</td>
+                <td>16.4</td>
+                <td>100%</td>
+            </tr>
+        </table>
+
+        <div class="insight danger">
+            <strong>Critical Insight:</strong> 80% of all clicks come from just 27 branded queries (people who already know the practice). Non-branded discovery queries generate 97.3% of impressions but only 0.06% CTR. The practice is effectively invisible to new patients searching for a dentist.
+        </div>
+
+        <h3 style="font-size:16px; margin:20px 0 12px; color:#4a5568;">CTR Visualization</h3>
+        <div style="margin-bottom: 12px;">
+            <div style="display:flex; justify-content:space-between; font-size:13px;">
+                <span>Branded CTR: 7.77%</span>
+                <span>Non-Branded CTR: 0.06%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill fill-green" style="width: 77%;">7.77%</div>
+            </div>
+            <div class="progress-bar" style="margin-top:4px;">
+                <div class="progress-fill fill-red" style="width: 0.6%; font-size:10px;">0.06%</div>
+            </div>
+        </div>
+
+        <h3 style="font-size:16px; margin:20px 0 12px; color:#4a5568;">Top 10 Queries by Clicks</h3>
+        <table>
+            <tr><th>#</th><th>Query</th><th>Clicks</th><th>Position</th></tr>
+            <tr><td>1</td><td>raleigh comprehensive dentistry</td><td class="highlight-green">86</td><td>#1</td></tr>
+            <tr><td>2</td><td>raleigh comprehensive and cosmetic dentistry</td><td class="highlight-green">75</td><td>#1</td></tr>
+            <tr><td>3</td><td>raleigh comprehensive & cosmetic dentistry</td><td>23</td><td>#1</td></tr>
+            <tr><td>4</td><td>dentist raleigh nc</td><td>8</td><td>#8</td></tr>
+            <tr><td>5</td><td>raleigh cosmetic dentistry</td><td>8</td><td>#19</td></tr>
+            <tr><td>6</td><td>dr gajjar dentist</td><td>5</td><td>#5</td></tr>
+            <tr><td>7</td><td>courtney thompson dds</td><td>5</td><td>#1</td></tr>
+            <tr><td>8</td><td>raleigh dentist</td><td>4</td><td>#7</td></tr>
+            <tr><td>9</td><td>raleigh comprehensive dentistry reviews</td><td>4</td><td>#3</td></tr>
+            <tr><td>10</td><td>raleigh dentistry</td><td>3</td><td>#3</td></tr>
+        </table>
+
+        <h3 style="font-size:16px; margin:20px 0 12px; color:#4a5568;">Top 10 Opportunity Queries (High Impressions, Low Position)</h3>
+        <table>
+            <tr><th>#</th><th>Query</th><th>Impressions</th><th>Position</th><th>Opportunity</th></tr>
+            <tr><td>1</td><td>dental implants raleigh nc</td><td>1,528</td><td>#20</td><td><span class="tag tag-high">HIGH</span></td></tr>
+            <tr><td>2</td><td>cosmetic dentist raleigh</td><td>1,208</td><td>#8</td><td><span class="tag tag-med">MEDIUM</span></td></tr>
+            <tr><td>3</td><td>emergency dentist raleigh nc</td><td>1,204</td><td>#13</td><td><span class="tag tag-med">MEDIUM</span></td></tr>
+            <tr><td>4</td><td>emergency dentist</td><td>1,081</td><td>#15</td><td><span class="tag tag-med">MEDIUM</span></td></tr>
+            <tr><td>5</td><td>comprehensive dental care</td><td>1,044</td><td>#18</td><td><span class="tag tag-med">MEDIUM</span></td></tr>
+            <tr><td>6</td><td>cosmetic dentistry raleigh nc</td><td>1,027</td><td>#14</td><td><span class="tag tag-med">MEDIUM</span></td></tr>
+            <tr><td>7</td><td>cosmetic dentist near me</td><td>832</td><td>#14</td><td><span class="tag tag-med">MEDIUM</span></td></tr>
+            <tr><td>8</td><td>dentists raleigh</td><td>690</td><td>#14</td><td><span class="tag tag-med">MEDIUM</span></td></tr>
+            <tr><td>9</td><td>raleigh dentists</td><td>641</td><td>#13</td><td><span class="tag tag-med">MEDIUM</span></td></tr>
+            <tr><td>10</td><td>family dentist near me</td><td>678</td><td>#29</td><td><span class="tag tag-high">HIGH</span></td></tr>
+        </table>
+    </div>
+
+    <!-- AI VISIBILITY -->
+    <div class="section">
+        <h2>AI Engine Visibility</h2>
+
+        <div class="kpi-grid" style="margin-bottom:20px;">
+            <div class="kpi-card">
+                <div class="value">17.9%</div>
+                <div class="label">Average Mention Rate</div>
+                <span class="status status-poor">1.25 / 7 queries</span>
+            </div>
+            <div class="kpi-card">
+                <div class="value">28.6%</div>
+                <div class="label">ChatGPT</div>
+                <span class="status status-warning">Best performer</span>
+            </div>
+            <div class="kpi-card">
+                <div class="value">14.3%</div>
+                <div class="label">Gemini / Perplexity / Claude</div>
+                <span class="status status-poor">Low visibility</span>
+            </div>
+        </div>
+
+        <h3 style="font-size:16px; margin:20px 0 12px; color:#4a5568;">Full Results Matrix</h3>
+        <table>
+            <tr>
+                <th>Query</th>
+                <th>ChatGPT</th>
+                <th>Gemini</th>
+                <th>Perplexity</th>
+                <th>Claude</th>
+            </tr>
+            <tr><td>"Who are the dentists near 27606?"</td><td class="highlight-red">Not mentioned</td><td class="highlight-red">Not mentioned</td><td class="highlight-red">Not mentioned</td><td class="highlight-red">Not mentioned</td></tr>
+            <tr><td>"Best dentist for implants near 27606?"</td><td class="highlight-yellow">Weak mention</td><td class="highlight-red">Not mentioned</td><td class="highlight-red">Not mentioned</td><td class="highlight-red">Not mentioned</td></tr>
+            <tr><td>"Emergency dentist near 27606?"</td><td class="highlight-green">Mentioned</td><td class="highlight-red">Not mentioned</td><td class="highlight-red">Not mentioned</td><td class="highlight-red">Not mentioned</td></tr>
+            <tr><td>"Good family dentist in Raleigh?"</td><td class="highlight-red">Not mentioned</td><td class="highlight-red">Not mentioned</td><td class="highlight-red">Not mentioned</td><td class="highlight-red">Not mentioned</td></tr>
+            <tr><td>"Best cosmetic dentist near 27606?"</td><td class="highlight-yellow">Weak mention</td><td class="highlight-red">Not mentioned</td><td class="highlight-red">Not mentioned</td><td class="highlight-red">Not mentioned</td></tr>
+            <tr><td>"Dentist with good reviews in Raleigh?"</td><td class="highlight-red">Not mentioned</td><td class="highlight-red">Not mentioned</td><td class="highlight-red">Not mentioned</td><td class="highlight-red">Not mentioned</td></tr>
+            <tr><td>"What do patients say about Raleigh Comprehensive and Cosmetic Dentistry?"</td><td class="highlight-green">Mentioned</td><td class="highlight-green">Mentioned</td><td class="highlight-yellow">Mixed</td><td class="highlight-yellow">Mixed</td></tr>
+        </table>
+
+        <div class="insight danger">
+            <strong>Discovery Gap:</strong> The practice appears in 0 out of 4 discovery queries across all AI engines. When patients ask "Who are the dentists near me?" or "Which dentist should I consider?", AI does not surface this practice.
+        </div>
+        <div class="insight" style="margin-top:8px;">
+            <strong>Brand Awareness:</strong> When asked directly by name, all 4 AI engines recognize the practice. The issue is discoverability, not awareness.
+        </div>
+
+        <h3 style="font-size:16px; margin:20px 0 12px; color:#4a5568;">AI Visibility by Query Type</h3>
+        <div style="margin-bottom: 12px;">
+            <div style="display:flex; justify-content:space-between; font-size:13px;"><span>Discovery queries</span><span class="highlight-red">0%</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-red" style="width:0%;">0%</div></div>
+        </div>
+        <div style="margin-bottom: 12px;">
+            <div style="display:flex; justify-content:space-between; font-size:13px;"><span>Service — Emergency</span><span class="highlight-yellow">25%</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-yellow" style="width:25%;">25%</span></div>
+        </div>
+        <div style="margin-bottom: 12px;">
+            <div style="display:flex; justify-content:space-between; font-size:13px;"><span>Service — Implants</span><span>8%</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-yellow" style="width:8%;">8%</div></div>
+        </div>
+        <div style="margin-bottom: 12px;">
+            <div style="display:flex; justify-content:space-between; font-size:13px;"><span>Service — Cosmetic</span><span>8%</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-yellow" style="width:8%;">8%</div></div>
+        </div>
+        <div style="margin-bottom: 12px;">
+            <div style="display:flex; justify-content:space-between; font-size:13px;"><span>Reviews/Reputation</span><span class="highlight-green">43%</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-green" style="width:43%;">43%</div></div>
+        </div>
+        <div style="margin-bottom: 12px;">
+            <div style="display:flex; justify-content:space-between; font-size:13px;"><span>Brand (direct name)</span><span class="highlight-green">100%</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-green" style="width:100%;">100%</div></div>
+        </div>
+    </div>
+
+    <!-- GBP PERFORMANCE -->
+    <div class="section">
+        <h2>Google Business Profile Performance</h2>
+
+        <div class="kpi-grid" style="margin-bottom:20px;">
+            <div class="kpi-card">
+                <div class="value">4.7<span style="font-size:18px">/5</span></div>
+                <div class="label">Rating</div>
+                <span class="status status-excellent">Excellent</span>
+            </div>
+            <div class="kpi-card">
+                <div class="value">91</div>
+                <div class="label">Reviews</div>
+                <span class="status status-good">Growing</span>
+            </div>
+            <div class="kpi-card">
+                <div class="value">26,918</div>
+                <div class="label">Profile Views (6mo)</div>
+                <span class="status status-excellent">Strong</span>
+            </div>
+            <div class="kpi-card">
+                <div class="value">6,312</div>
+                <div class="label">Search Appearances</div>
+                <span class="status status-good">Good</span>
+            </div>
+            <div class="kpi-card">
+                <div class="value">216</div>
+                <div class="label">Phone Calls (6mo)</div>
+                <span class="status status-good">~36/month</span>
+            </div>
+            <div class="kpi-card">
+                <div class="value">341</div>
+                <div class="label">Website Clicks (6mo)</div>
+                <span class="status status-good">~57/month</span>
+            </div>
+        </div>
+
+        <h3 style="font-size:16px; margin:20px 0 12px; color:#4a5568;">Traffic Source Breakdown</h3>
+        <table>
+            <tr><th>Source</th><th>Views</th><th>Percentage</th><th>Visual</th></tr>
+            <tr>
+                <td>Google Search — Mobile</td><td>17,854</td><td>66%</td>
+                <td><div class="progress-bar" style="width:200px;"><div class="progress-fill fill-green" style="width:66%;">66%</div></div></td>
+            </tr>
+            <tr>
+                <td>Google Search — Desktop</td><td>7,571</td><td>28%</td>
+                <td><div class="progress-bar" style="width:200px;"><div class="progress-fill fill-blue" style="width:28%;">28%</div></div></td>
+            </tr>
+            <tr>
+                <td>Google Maps — Mobile</td><td>923</td><td>3%</td>
+                <td><div class="progress-bar" style="width:200px;"><div class="progress-fill fill-yellow" style="width:3%;">3%</div></div></td>
+            </tr>
+            <tr>
+                <td>Google Maps — Desktop</td><td>570</td><td>2%</td>
+                <td><div class="progress-bar" style="width:200px;"><div class="progress-fill fill-yellow" style="width:2%;">2%</div></div></td>
+            </tr>
+        </table>
+
+        <h3 style="font-size:16px; margin:20px 0 12px; color:#4a5568;">Top GBP Search Queries</h3>
+        <table>
+            <tr><th>#</th><th>Query</th><th>Appearances</th><th>Type</th></tr>
+            <tr><td>1</td><td>lane and associates</td><td>943</td><td><span class="tag tag-high">Competitor</span></td></tr>
+            <tr><td>2</td><td>lane and associates raleigh</td><td>573</td><td><span class="tag tag-high">Competitor</span></td></tr>
+            <tr><td>3</td><td>riccobene associates family dentistry</td><td>559</td><td><span class="tag tag-high">Competitor</span></td></tr>
+            <tr><td>4</td><td>dentist near me</td><td>544</td><td><span class="tag tag-med">Discovery</span></td></tr>
+            <tr><td>5</td><td>raleigh periodontics</td><td>347</td><td><span class="tag tag-med">Service</span></td></tr>
+        </table>
+
+        <div class="insight warning">
+            <strong>Observation:</strong> Top 3 GBP queries are competitor names, not the practice name. This suggests patients searching for competitors are seeing this listing as an alternative. This is valuable visibility but indicates the practice's own brand search volume needs to grow.
+        </div>
+    </div>
+
+    <!-- COMPETITORS -->
+    <div class="section">
+        <h2>Competitive Landscape</h2>
+        <p style="color:#718096; margin-bottom:16px;">119 practices identified in the Raleigh market. Below are the most AI-visible competitors.</p>
+
+        <table>
+            <tr>
+                <th>Competitor</th>
+                <th>AI Mentions</th>
+                <th>Notable Data</th>
+                <th>Threat Level</th>
+            </tr>
+            <tr>
+                <td>Smiles at Glenwood</td>
+                <td><span class="highlight-green">4/4 engines</span></td>
+                <td>601 Tucker St</td>
+                <td><span class="tag tag-high">HIGH</span></td>
+            </tr>
+            <tr>
+                <td>City of Oaks Dental</td>
+                <td><span class="highlight-green">4/4 engines</span></td>
+                <td>Invisalign, veneers, CEREC</td>
+                <td><span class="tag tag-high">HIGH</span></td>
+            </tr>
+            <tr>
+                <td>Raleigh Dental Loft (Dr. Kashyap)</td>
+                <td><span class="highlight-blue">3/4 engines</span></td>
+                <td>1601 Jones Franklin Rd</td>
+                <td><span class="tag tag-high">HIGH</span></td>
+            </tr>
+            <tr>
+                <td>Russo Dentistry (Justin Russo)</td>
+                <td><span class="highlight-blue">3/4 engines</span></td>
+                <td>AACD member</td>
+                <td><span class="tag tag-med">MEDIUM</span></td>
+            </tr>
+            <tr>
+                <td>Koneru Family Dentistry</td>
+                <td>1/4 engines</td>
+                <td>4.9/746 reviews</td>
+                <td><span class="tag tag-high">HIGH</span></td>
+            </tr>
+            <tr>
+                <td>Raleigh Implant & Family</td>
+                <td>2/4 engines</td>
+                <td>4.9/197 Birdeye</td>
+                <td><span class="tag tag-med">MEDIUM</span></td>
+            </tr>
+            <tr>
+                <td>Gentle Smiles of Raleigh</td>
+                <td>2/4 engines</td>
+                <td>5.0/510 reviews</td>
+                <td><span class="tag tag-high">HIGH</span></td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- OPPORTUNITIES -->
+    <div class="section">
+        <h2>Priority Action Items</h2>
+
+        <div class="opp-grid">
+            <div class="opp-card">
+                <h4>Fix GBP Categories</h4>
+                <div class="meta">
+                    <span class="tag tag-high">HIGH</span>
+                    <span>Impact: HIGH</span>
+                    <span>Effort: LOW</span>
+                </div>
+                <p style="font-size:13px; color:#718096; margin-top:8px;">Set primary category to "Dentist", add secondary categories (Cosmetic, Emergency, Implants, Family). This is the #1 quick win.</p>
+            </div>
+            <div class="opp-card">
+                <h4>Fix Yelp "Closed" Status</h4>
+                <div class="meta">
+                    <span class="tag tag-high">HIGH</span>
+                    <span>Impact: HIGH</span>
+                    <span>Effort: LOW</span>
+                </div>
+                <p style="font-size:13px; color:#718096; margin-top:8px;">Yelp shows the practice as "Closed" with 3.6 stars. Update to "Open" and respond to reviews.</p>
+            </div>
+            <div class="opp-card">
+                <h4>Fix WebMD Profile</h4>
+                <div class="meta">
+                    <span class="tag tag-high">HIGH</span>
+                    <span>Impact: HIGH</span>
+                    <span>Effort: LOW</span>
+                </div>
+                <p style="font-size:13px; color:#718096; margin-top:8px;">WebMD shows "not accepting new patients". Update to "Accepting new patients" with correct info.</p>
+            </div>
+            <div class="opp-card">
+                <h4>Claim ADA Find-a-Dentist</h4>
+                <div class="meta">
+                    <span class="tag tag-high">HIGH</span>
+                    <span>Impact: HIGH</span>
+                    <span>Effort: MEDIUM</span>
+                </div>
+                <p style="font-size:13px; color:#718096; margin-top:8px;">The #1 directory AI engines reference for dentists. Practice is not currently listed.</p>
+            </div>
+            <div class="opp-card">
+                <h4>Claim Lantern Directory</h4>
+                <div class="meta">
+                    <span class="tag tag-high">HIGH</span>
+                    <span>Impact: HIGH</span>
+                    <span>Effort: LOW</span>
+                </div>
+                <p style="font-size:13px; color:#718096; margin-top:8px;">Referenced by all 4 AI engines. Currently not claimed by the practice.</p>
+            </div>
+            <div class="opp-card">
+                <h4>Run Rank Grid</h4>
+                <div class="meta">
+                    <span class="tag tag-high">HIGH</span>
+                    <span>Impact: HIGH</span>
+                    <span>Effort: MEDIUM</span>
+                </div>
+                <p style="font-size:13px; color:#718096; margin-top:8px;">55 queries, 9 locations, 2 devices. Spreadsheet ready to fill. In progress.</p>
+            </div>
+            <div class="opp-card">
+                <h4>Add llms.txt to Website</h4>
+                <div class="meta">
+                    <span class="tag tag-med">MEDIUM</span>
+                    <span>Impact: MEDIUM</span>
+                    <span>Effort: LOW</span>
+                </div>
+                <p style="font-size:13px; color:#718096; margin-top:8px;">New standard that helps AI engines understand your website. Simple text file at site root.</p>
+            </div>
+            <div class="opp-card">
+                <h4>Create FAQ Page</h4>
+                <div class="meta">
+                    <span class="tag tag-med">MEDIUM</span>
+                    <span>Impact: MEDIUM</span>
+                    <span>Effort: MEDIUM</span>
+                </div>
+                <p style="font-size:13px; color:#718096; margin-top:8px;">AI engines love FAQ content. Add common patient questions for AI to reference.</p>
+            </div>
+            <div class="opp-card">
+                <h4>Start Weekly GBP Posts</h4>
+                <div class="meta">
+                    <span class="tag tag-med">MEDIUM</span>
+                    <span>Impact: MEDIUM</span>
+                    <span>Effort: LOW</span>
+                </div>
+                <p style="font-size:13px; color:#718096; margin-top:8px;">2-3 posts per week. Mix of educational, promotional, and community content.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- GA4 + GTM STATUS -->
+    <div class="section">
+        <h2>GA4 + GTM — Access Granted</h2>
+        <div class="insight" style="background:#c6f6d5; border-left-color:#38a169; margin-bottom:20px;">
+            <strong style="color:#22543d;">Access Status:</strong> <span style="color:#22543d;">Avi has provided GA4 + GTM access. Live audit kits are ready to execute (~30 min total).</span>
+        </div>
+
+        <h3 style="font-size:16px; margin:20px 0 12px; color:#4a5568;">GA4 Audit Kit</h3>
+        <p style="font-size:14px; color:#718096; margin-bottom:12px;">Open <code>07_Templates/GA4_Live_Audit_Kit.md</code> and follow step-by-step.</p>
+        <table>
+            <tr><th>Step</th><th>What to Capture</th><th>Time</th></tr>
+            <tr><td>1</td><td>Property info (ID, measurement ID, data stream)</td><td>2 min</td></tr>
+            <tr><td>2</td><td>Reports → Overview (users, sessions, engagement)</td><td>3 min</td></tr>
+            <tr><td>3</td><td>Reports → Acquisition → Traffic acquisition</td><td>3 min</td></tr>
+            <tr><td>4</td><td>Reports → Engagement → Pages and screens</td><td>3 min</td></tr>
+            <tr><td>5</td><td>Reports → Engagement → Events</td><td>3 min</td></tr>
+            <tr><td>6</td><td>Reports → Engagement → Conversions</td><td>2 min</td></tr>
+            <tr><td>7</td><td>Configure → Events + Conversions</td><td>3 min</td></tr>
+            <tr><td>8</td><td>Admin → Data stream settings</td><td>3 min</td></tr>
+            <tr><td>9</td><td>Admin → Data retention + Google Signals</td><td>2 min</td></tr>
+            <tr><td>10</td><td>Demographics (if available)</td><td>2 min</td></tr>
+        </table>
+
+        <h3 style="font-size:16px; margin:20px 0 12px; color:#4a5568;">GTM Audit Kit</h3>
+        <p style="font-size:14px; color:#718096; margin-bottom:12px;">Open <code>07_Templates/GTM_Live_Audit_Kit.md</code> and follow step-by-step. Use Preview mode only.</p>
+        <table>
+            <tr><th>Step</th><th>What to Capture</th><th>Time</th></tr>
+            <tr><td>1</td><td>Container info + all tags list</td><td>3 min</td></tr>
+            <tr><td>2</td><td>All triggers list</td><td>3 min</td></tr>
+            <tr><td>3</td><td>Variables → Configure (built-in + custom)</td><td>3 min</td></tr>
+            <tr><td>4</td><td>Preview mode — homepage load</td><td>2 min</td></tr>
+            <tr><td>5</td><td>Preview mode — phone click test</td><td>2 min</td></tr>
+            <tr><td>6</td><td>Preview mode — form submit test</td><td>2 min</td></tr>
+            <tr><td>7</td><td>Preview mode — scroll test</td><td>2 min</td></tr>
+            <tr><td>8</td><td>GA4 integration check</td><td>2 min</td></tr>
+            <tr><td>9</td><td>Custom code / HTML tags</td><td>2 min</td></tr>
+        </table>
+
+        <div class="insight">
+            <strong>What we're looking for:</strong> Are phone clicks, form submissions, and appointment button clicks being tracked? These are the events that convert a website visitor into a patient. If they're not tracked, you can't measure ROI.
+        </div>
+    </div>
+
+    <!-- PROJECT STATUS -->
+    <div class="section">
+        <h2>Project Status</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-icon icon-done">&#10003;</div>
+                <div class="timeline-text">
+                    <strong>CSV exports analyzed</strong><br>
+                    <small>All CSV files analyzed and documented</small>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-icon icon-done">&#10003;</div>
+                <div class="timeline-text">
+                    <strong>GSC baseline complete</strong><br>
+                    <small>1,000 queries analyzed, 259 clicks, 85,713 impressions</small>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-icon icon-done">&#10003;</div>
+                <div class="timeline-text">
+                    <strong>Schema audit + AEO instructions</strong><br>
+                    <small>2 blocks found, 1 broken. Change instructions ready for agency</small>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-icon icon-done">&#10003;</div>
+                <div class="timeline-text">
+                    <strong>All 4 AI scans complete</strong><br>
+                    <small>ChatGPT, Gemini, Perplexity, Claude — 17.9% mention rate</small>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-icon icon-done">&#10003;</div>
+                <div class="timeline-text">
+                    <strong>GBP audit complete</strong><br>
+                    <small>91 reviews, 4.7/5 stars, 26,918 views, 216 calls</small>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-icon icon-done">&#10003;</div>
+                <div class="timeline-text">
+                    <strong>Rank grid prepared</strong><br>
+                    <small>55 queries, 9 locations, 2 devices, 990-row spreadsheet ready</small>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-icon icon-progress">&#9679;</div>
+                <div class="timeline-text">
+                    <strong>Rank grid execution — IN PROGRESS</strong><br>
+                    <small>Currently running 55 queries from 9 locations. Results being compiled.</small>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-icon icon-pending">&#9675;</div>
+                <div class="timeline-text">
+                    <strong>Schema fix — pending your input</strong><br>
+                    <small>Waiting for Friday hours + treatment packages from Avi</small>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-icon icon-progress">&#9679;</div>
+                <div class="timeline-text">
+                    <strong>GA4 + GTM audits — IN PROGRESS</strong><br>
+                    <small>Access granted. Audit kits ready. Step-by-step guides in 07_Templates/ folder.</small>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-icon icon-pending">&#9675;</div>
+                <div class="timeline-text">
+                    <strong>Bing Webmaster + Bing Places</strong><br>
+                    <small>Setup guide ready. Waiting for Avi verification.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RECOMMENDATIONS -->
+    <div class="section">
+        <h2>Recommended Improvements</h2>
+
+        <h3 style="font-size:16px; margin:20px 0 12px; color:#3182ce;">AEO Improvements</h3>
+        <table>
+            <tr><th>#</th><th>Improvement</th><th>Impact</th><th>Effort</th></tr>
+            <tr><td>1</td><td>Add llms.txt to website root</td><td>Medium</td><td>Low</td></tr>
+            <tr><td>2</td><td>Add llms-full.txt (comprehensive version)</td><td>Medium</td><td>Low</td></tr>
+            <tr><td>3</td><td>Create FAQ page with common patient questions</td><td>Medium</td><td>Medium</td></tr>
+            <tr><td>4</td><td>Add service-specific landing pages</td><td>High</td><td>High</td></tr>
+            <tr><td>5</td><td>Optimize website content for AI (headings, natural language, ZIP codes)</td><td>Medium</td><td>Medium</td></tr>
+            <tr><td>6</td><td>Ensure consistent NAP across all website pages</td><td>High</td><td>Low</td></tr>
+            <tr><td>7</td><td>Implement schema.org on all pages (not just homepage)</td><td>High</td><td>Medium</td></tr>
+        </table>
+
+        <h3 style="font-size:16px; margin:20px 0 12px; color:#3182ce; margin-top:24px;">GEO Improvements</h3>
+        <table>
+            <tr><th>#</th><th>Improvement</th><th>Impact</th><th>Effort</th></tr>
+            <tr><td>1</td><td>Claim and optimize all directory listings (ADA, Lantern, Birdeye, DentaScore, etc.)</td><td>High</td><td>Medium</td></tr>
+            <tr><td>2</td><td>Increase review count to 150+ at 4.5+ stars</td><td>Medium</td><td>Medium</td></tr>
+            <tr><td>3</td><td>Start weekly GBP posts (2-3 per week)</td><td>Medium</td><td>Low</td></tr>
+            <tr><td>4</td><td>Add GBP Products for key services</td><td>Medium</td><td>Low</td></tr>
+            <tr><td>5</td><td>Add GBP Q&A content (pre-answer common questions)</td><td>Medium</td><td>Low</td></tr>
+            <tr><td>6</td><td>Add service area ZIP codes to GBP</td><td>High</td><td>Low</td></tr>
+            <tr><td>7</td><td>Set up Bing Webmaster + Bing Places</td><td>Low</td><td>Low</td></tr>
+            <tr><td>8</td><td>Create and submit XML sitemap</td><td>Medium</td><td>Low</td></tr>
+        </table>
+    </div>
+
+    <!-- VISUAL SUMMARY -->
+    <div class="section">
+        <h2>Visibility Summary</h2>
+        <div class="ascii-chart">
+SEARCH PERFORMANCE
+====================================
+Clicks:  259 total
+  207 branded (80%)     ████████████████████░░░░░░░░░░
+   52 non-branded (20%)  ████░░░░░░░░░░░░░░░░░░░░░░░░
+
+Impressions: 85,713 total
+   2,663 branded (3%)      ██░░░░░░░░░░░░░░░░░░░░░░░░
+  83,050 non-branded (97%) ██████████████████████████
+
+CTR:  0.30% overall
+       7.77% branded   ████████████████░░░░░░░░░░░░
+       0.06% non-branded █░░░░░░░░░░░░░░░░░░░░░░░░░
+
+AI VISIBILITY
+====================================
+Mention rate: 17.9% (1.25/7 queries)
+   Discovery queries:    0%   ░░░░░░░░░░░░░░░░░░░░░░░░
+   Service — Emergency: 25%   ██████░░░░░░░░░░░░░░░░░░░
+   Service — Implants:   8%   ██░░░░░░░░░░░░░░░░░░░░░░░
+   Service — Cosmetic:   8%   ██░░░░░░░░░░░░░░░░░░░░░░░
+   Reviews/Reputation:  43%   ████████████░░░░░░░░░░░░░░
+   Brand (direct name): 100%  ██████████████████████████
+
+GBP HEALTH
+====================================
+Rating: 4.7/5  ████████████████████████████████░░  EXCELLENT
+Reviews: 91    ████████████████░░░░░░░░░░░░░░░░  GOOD
+Views: 26,918  ████████████████████████████████░  EXCELLENT
+Calls: 216     ███████████████░░░░░░░░░░░░░░░░░  GOOD
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

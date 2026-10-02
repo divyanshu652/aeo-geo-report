@@ -1,0 +1,169 @@
+{
+  "practice": "Raleigh Comprehensive & Cosmetic Dentistry",
+  "status": "audited",
+  "last_audit": "2026-10-02",
+  "data": {
+    "business_info": {
+      "name": "Raleigh Comprehensive & Cosmetic Dentistry",
+      "address": "119 North Boylan Avenue, Raleigh, NC 27603",
+      "phone": "(919) 828-3775",
+      "website": "https://www.raleighdentistry.com",
+      "primary_category": null,
+      "secondary_categories": [],
+      "hours": {
+        "monday": "08:00-17:00",
+        "tuesday": "08:00-17:00",
+        "wednesday": "08:00-17:00",
+        "thursday": "08:00-17:00",
+        "friday": "08:00-17:00",
+        "saturday": null,
+        "sunday": null
+      },
+      "friday_note": "Site says 'Open Every Other Friday' — needs confirmation",
+      "price_range": "$$$",
+      "established": null,
+      "description": null
+    },
+    "doctors": [
+      {
+        "name": "Dr. Vraj Gajjar",
+        "role": "Dentist",
+        "url": null
+      },
+      {
+        "name": "Dr. Janaki Gajjar",
+        "role": "Dentist",
+        "url": null
+      }
+    ],
+    "photos": {
+      "logo": null,
+      "cover": null,
+      "interior_count": null,
+      "exterior_count": null,
+      "team_count": null
+    },
+    "reviews": {
+      "total": 91,
+      "average_rating": 4.7,
+      "rating_distribution": {
+        "5_star": null,
+        "4_star": null,
+        "3_star": null,
+        "2_star": null,
+        "1_star": null
+      },
+      "platforms": {
+        "google": {
+          "rating": 4.7,
+          "count": 91
+        },
+        "birdeye": {
+          "rating": 4.6,
+          "count": 95
+        },
+        "yelp": {
+          "rating": 3.6,
+          "count": 11,
+          "note": "Lists as 'Closed' — conflicts with live site, needs verification"
+        },
+        "healthgrades": null,
+        "zocdoc": null
+      },
+      "recent_reviews": [],
+      "unanswered_reviews": []
+    },
+    "performance": {
+      "period": "may_2026_to_oct_2026",
+      "total_views": 26918,
+      "search_views": 6312,
+      "map_views": 1493,
+      "platform_breakdown": {
+        "google_search_mobile": {
+          "views": 17854,
+          "percentage": 66
+        },
+        "google_search_desktop": {
+          "views": 7571,
+          "percentage": 28
+        },
+        "google_maps_mobile": {
+          "views": 923,
+          "percentage": 3
+        },
+        "google_maps_desktop": {
+          "views": 570,
+          "percentage": 2
+        }
+      },
+      "website_clicks": 341,
+      "phone_calls": 216,
+      "direction_requests": null,
+      "booking_requests": null,
+      "top_search_queries": [
+        {"query": "lane and associates", "impressions": 943},
+        {"query": "lane and associates raleigh", "impressions": 573},
+        {"query": "riccobene associates family dentistry", "impressions": 559},
+        {"query": "dentist near me", "impressions": 544},
+        {"query": "raleigh periodontics", "impressions": 347}
+      ],
+      "calls_trend": {
+        "may_2026": null,
+        "jun_2026": null,
+        "jul_2026": null,
+        "aug_2026": null,
+        "sept_2026": null,
+        "oct_2026": null,
+        "total": 216
+      },
+      "website_clicks_trend": {
+        "may_2026": null,
+        "jun_2026": null,
+        "jul_2026": null,
+        "aug_2026": null,
+        "sept_2026": null,
+        "oct_2026": null,
+        "total": 341
+      }
+    },
+    "posts": [],
+    "qa": [],
+    "products_services": [],
+    "nap_consistency": {
+      "gbp": null,
+      "website": {
+        "name": "Raleigh Comprehensive & Cosmetic Dentistry",
+        "address": "119 North Boylan Avenue, Raleigh, NC 27603",
+        "phone": "(919) 828-3775",
+        "website": "raleighdentistry.com"
+      },
+      "gsc": null,
+      "match": null
+    },
+    "issues": [
+      "Top search queries are competitor names (Lane & Associates, Riccobene) — not practice name",
+      "NAP inconsistencies across external directories (Yelp, WebMD, DentaScore, newpatientsinc.com)",
+      "Yelp lists practice as 'Closed' with 3.6 stars",
+      "WebMD shows 'not accepting new patients'",
+      "Different dentist names across platforms (Dr. Gajjar vs Dr. Thompson vs Dr. Williamson)",
+      "Missing from ADA Find-a-Dentist",
+      "Missing from key directories surfaced by AI (Lantern, PromptLoop, DentaScore, dental.page)",
+      "Review count (91) lower than nearby competitors (200-800+)",
+      "Friday hours contradictory on website"
+    ],
+    "recommendations": [
+      "Fix NAP data across all directories — use consistent name, address, phone",
+      "Claim and update Yelp listing (change status to Open)",
+      "Claim and update WebMD profile (change to accepting new patients)",
+      "Claim profiles on ADA Find-a-Dentist, Lantern, DentaScore, dental.page, PromptLoop",
+      "Add secondary GBP categories: Cosmetic Dentist, Emergency Dentist, Dental Implant Provider, Family Dentist",
+      "Add all services to GBP with descriptions",
+      "Upload more photos (logo, cover, interior, team, before/after)",
+      "Respond to all unanswered reviews",
+      "Start weekly GBP posts (Updates and Offers)",
+      "Answer all Q&A questions, add common FAQs proactively",
+      "Add GBP Products for key services (implants, whitening, veneers, emergency exam)",
+      "Encourage patients to leave Google reviews — target 150+ reviews"
+    ]
+  }
+}
